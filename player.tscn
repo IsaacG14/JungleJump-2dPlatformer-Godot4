@@ -1,0 +1,151 @@
+[gd_scene load_steps=13 format=3 uid="uid://d3nscytd35uhc"]
+
+[ext_resource type="Texture2D" uid="uid://lqals8v555pu" path="res://ui/player_sheet.png" id="1_g1xlw"]
+[ext_resource type="Script" path="res://player.gd" id="1_xqohe"]
+[ext_resource type="AudioStream" uid="uid://cnmtgqiun2gco" path="res://assets/audio/jump4.ogg" id="3_4vlxx"]
+[ext_resource type="AudioStream" uid="uid://g6ogr65lypmd" path="res://assets/audio/hurt1.ogg" id="4_8fyiw"]
+
+[sub_resource type="Animation" id="Animation_1ovm2"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [10]
+}
+
+[sub_resource type="Animation" id="Animation_xnnvs"]
+resource_name = "hurt"
+length = 0.2
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [5, 6]
+}
+
+[sub_resource type="Animation" id="Animation_6melv"]
+resource_name = "idle"
+length = 0.4
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [7, 10]
+}
+
+[sub_resource type="Animation" id="Animation_nivkn"]
+resource_name = "jump_down"
+length = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [12]
+}
+
+[sub_resource type="Animation" id="Animation_445ag"]
+resource_name = "jump_up"
+length = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [11]
+}
+
+[sub_resource type="Animation" id="Animation_ohy20"]
+resource_name = "run"
+length = 0.5
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.4),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [13, 18]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_dmw1c"]
+_data = {
+"RESET": SubResource("Animation_1ovm2"),
+"hurt": SubResource("Animation_xnnvs"),
+"idle": SubResource("Animation_6melv"),
+"jump_down": SubResource("Animation_nivkn"),
+"jump_up": SubResource("Animation_445ag"),
+"run": SubResource("Animation_ohy20")
+}
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_qi3mi"]
+size = Vector2(13, 18)
+
+[node name="Player" type="CharacterBody2D"]
+collision_layer = 2
+collision_mask = 13
+script = ExtResource("1_xqohe")
+gravity = 700
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("1_g1xlw")
+offset = Vector2(0, -16)
+hframes = 19
+frame = 10
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+root_node = NodePath("../Sprite2D")
+libraries = {
+"": SubResource("AnimationLibrary_dmw1c")
+}
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(-0.5, -10)
+shape = SubResource("RectangleShape2D_qi3mi")
+
+[node name="Camera2D" type="Camera2D" parent="."]
+offset = Vector2(0, -28)
+zoom = Vector2(2.5, 2.5)
+
+[node name="JumpSound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("3_4vlxx")
+volume_db = -13.148
+
+[node name="HurtSound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("4_8fyiw")
+volume_db = -9.905
